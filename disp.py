@@ -4,25 +4,35 @@ import utils
 def clean_csv():
     #读取要处理的csv
     data = utils.read_csv(r"C:\Users\Administrator\Desktop\数据仓库与数据挖掘第一次作业\数据仓库与数据挖掘第一次作业\dataset\disp.csv")
-    # data = utils.read_csv(r"C:\Users\Administrator\Desktop\clean\client.csv")
+    # data = utils.read_csv(r"C:\Users\Administrator\Desktop\clean\disp.csv")
 
-    ex_data = utils.read_csv(r"C:\Users\Administrator\Desktop\数据仓库与数据挖掘第一次作业\数据仓库与数据挖掘第一次作业\dataset\client.csv")
-    size = len(ex_data)
-    external_key = set()
+    client_data = utils.read_csv(r"C:\Users\Administrator\Desktop\clean\client.csv")
+    size = len(client_data)
+    client_id = set()
     for r in range(size):
         if r == 0:
             continue
-        external_key.add(ex_data[r][0])
+        client_id.add(client_data[r][0])
+
+    account_data = utils.read_csv(r"C:\Users\Administrator\Desktop\clean\account.csv")
+    size = len(account_data)
+    account_id = set()
+    for r in range(size):
+        if r == 0:
+            continue
+        account_id.add(account_data[r][0])
 
     row_num = len(data)
 
     result = list(list())
 
+    type = {"OWNER", "DISPONENT"}
+
     id = set()
 
     for r in range(row_num):
         if r == 0:
-            line = ["client_id", "birth_number", "district_id", "age", "gender"]
+            line = ["disp_id", "client_id", "account_id", "type"]
             result.append(line)
             continue
 
@@ -39,36 +49,21 @@ def clean_csv():
         id.add(v0)
 
         v1 = data[r][1]
-        if not utils.is_birth(v1):
-            print("错误birth_number：", r, 1, v1)
+        if v1 not in client_id:
+            print("client_id不存在：", r, 1, v1)
             continue
-        year = int(v1[0:2])
-        month = int(v1[2:4])
-        day = int(v1[4:6])
-
-        # 女
-        if month > 12:
-            month -= 50
-            gender = "female"
-        else:
-            gender = "male"
-
-        birthday = "19" + str(year) + "-" + str(month) + "-" + str(day)
-
-        if not utils.is_valid_date(birthday):
-            print("错误birth_number：", r, 1, v1)
-            continue
-        age = str(100 - year)
 
         v2 = data[r][2]
-        if not utils.is_number(v2):
-            print("错误district_id：", r, 2, v2)
-            continue
-        if int(v2) < 1 or int(v2) > 77:
-            print("外键不存在：", r, 2, v2)
+        if v2 not in account_id:
+            print("account_id不存在：", r, 2, v2)
             continue
 
-        line = [v0, v1, v2, age, gender]
+        v3 = data[r][3]
+        if v3 not in type:
+            print("错误type：", r, 3, v3)
+            continue
+
+        line = [v0, v1, v2,v3]
         result.append(line)
 
     utils.write_csv(result, r"C:\Users\Administrator\Desktop\clean\disp.csv")

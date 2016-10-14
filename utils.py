@@ -31,6 +31,7 @@ def is_number(str):
     else:
         return False
 
+
 def is_birth(str):
     pattern = re.compile(r"^\d{6}")
     match = pattern.match(str)
@@ -39,8 +40,18 @@ def is_birth(str):
     else:
         return False
 
+
 def is_date(str):
     pattern = re.compile(r"^\d{4}/\d{1,2}/\d{1,2} \d:\d{2}")
+    match = pattern.match(str)
+    if match:
+        return True
+    else:
+        return False
+
+
+def is_full_date(str):
+    pattern = re.compile(r"^\d{4}-\d{1,2}-\d{1,2} 00:00:00")
     match = pattern.match(str)
     if match:
         return True
@@ -76,3 +87,14 @@ def is_valid_date(str):
     return True
   except:
     return False
+
+
+def is_bank(str):
+    if str == "":
+        return True
+    pattern = re.compile(r"^[A-Z]{2}$|")
+    match = pattern.match(str)
+    if match:
+        return True
+    else:
+        return False
