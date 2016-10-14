@@ -78,6 +78,8 @@ def clean_csv():
             continue
 
         v7 = data[r][7]
+        if v7 == " ":
+            v7 = ""
         if v7 not in k_symbol:
             print("错误k_symbol：", r, 7, v7)
             continue
